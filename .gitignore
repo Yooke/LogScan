@@ -1,0 +1,5 @@
+/.idea
+/pkg
+/build
+/src/gopkg.in/
+/config.json
