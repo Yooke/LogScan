@@ -1,0 +1,2 @@
+# LogScan
+Nginx log scan
