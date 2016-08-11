@@ -106,7 +106,8 @@ func getPVPreHour() {
 
 func getTCTop() {
 	var result []struct {
-		Path  string `bson:"_id"`
+		Aid   string
+		Path  string
 		Times uint64
 		TCAvg float32 `bson:"tc_avg"`
 	}
@@ -117,8 +118,8 @@ func getTCTop() {
 	selector := bson.M{"date": yesterday.Format("2006-01-02")}
 	query := []bson.M{
 		{"$match": bson.M{"date": bson.M{"$gte": yesterday, "$lt": today}}},
-		{"$group": bson.M{"_id": "$path", "times": bson.M{"$sum": 1}, "count": bson.M{"$sum": "$handletime"}}},
-		{"$project": bson.M{"times": "$times", "tc_avg": bson.M{"$divide": []string{"$count", "$times"}}}},
+		{"$group": bson.M{"_id": bson.M{"aid": "$aid", "path": "$path"}, "times": bson.M{"$sum": 1}, "count": bson.M{"$sum": "$handletime"}}},
+		{"$project": bson.M{"_id": 0, "aid": "$_id.aid", "path": "$_id.path", "times": "$times", "tc_avg": bson.M{"$divide": []string{"$count", "$times"}}}},
 		{"$sort": bson.M{"tc_avg": -1}},
 		{"$limit": 20},
 	}
